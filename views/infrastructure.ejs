@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+      body {
+          background: linear-gradient(135deg, #1E2A78, #0F172A);
+          color: white;
+          font-family: 'Poppins', sans-serif;
+
+          display: flex;
+          flex-direction: column;
+          height: auto;
+          margin: 0;
+          
+      }
+      .glass {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 1rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      padding: 2rem;
+      margin: 1rem 0;
+      color: #fff;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 300px !important;
+    }
+      
+  </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-slate-900 text-white px-4">
+            <div class="container-fluid">
+              <a class="navbar-brand text-white" href="#">SRM University</a>
+              <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                  <li class="nav-item"><a class="nav-link text-white" href="/">Home</a></li>
+                  <li class="nav-item"><a class="nav-link text-white" href="/admin_details">Dashboard</a></li>
+                  <li class="nav-item"><a class="nav-link text-white" href="/admin_details/vigilance">Vigilance</a></li>
+                  <li class="nav-item"><a class="nav-link text-white" href="/admin_details/detention_list">Detention List</a></li>
+                  <li class="nav-item"><a class="nav-link text-white" href="/admin_details/mess_details">Mess/Hostels</a></li>
+                  <li class="nav-item"><a class="nav-link text-white" href="/admin_details/infrastructure_details">Infrastructure</a></li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+    </header>
+    <main>
+
+        <div class="container">
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Parks -->
+                <div class="glass">
+                  <h2 class="text-2xl font-semibold text-green-400 mb-2">🌳 Parks</h2>
+                  <p><strong>Number:</strong> 6</p>
+                  <p><strong>Lifespan:</strong> 12 years</p>
+                  <p><strong>Student Feedback:</strong> Well maintained, relaxing environment</p>
+                  <p><strong>Faculty Feedback:</strong> Great for walks, needs more seating</p>
+                  <p><strong>Construction Status:</strong> Fully built</p>
+                  <p><strong>Damage Info:</strong> Slight wear on pathways</p>
+                  <canvas id="parkChart" height="100"></canvas>
+                </div>
+          
+                <!-- Hospitals -->
+                <div class="glass">
+                  <h2 class="text-2xl font-semibold text-red-400 mb-2">🏥 Hospitals</h2>
+                  <p><strong>Number:</strong> 2</p>
+                  <p><strong>Lifespan:</strong> 8 years</p>
+                  <p><strong>Student Feedback:</strong> Quick response, needs more beds</p>
+                  <p><strong>Faculty Feedback:</strong> Well equipped</p>
+                  <p><strong>Construction Status:</strong> Operational</p>
+                  <p><strong>Damage Info:</strong> Minor electrical issues</p>
+                  <canvas id="hospitalChart" height="100"></canvas>
+                </div>
+          
+                <!-- Academic Blocks -->
+                <div class="glass">
+                  <h2 class="text-2xl font-semibold text-yellow-300 mb-2">📚 Academic Blocks</h2>
+                  <p><strong>Number:</strong> 10</p>
+                  <p><strong>Lifespan:</strong> 15+ years</p>
+                  <p><strong>Student Feedback:</strong> Spacious, modern tech support</p>
+                  <p><strong>Faculty Feedback:</strong> Good lab facilities, Wi-Fi upgrade needed</p>
+                  <p><strong>Construction Status:</strong> Fully operational</p>
+                  <p><strong>Damage Info:</strong> HVAC repair ongoing in 2 blocks</p>
+                  <canvas id="academicChart" height="100"></canvas>
+                </div>
+          
+                <!-- Gardens -->
+                <div class="glass">
+                  <h2 class="text-2xl font-semibold text-pink-400 mb-2">🌺 Gardens</h2>
+                  <p><strong>Number:</strong> 4</p>
+                  <p><strong>Lifespan:</strong> 6 years</p>
+                  <p><strong>Student Feedback:</strong> Great for study breaks</p>
+                  <p><strong>Faculty Feedback:</strong> Adds greenery to campus</p>
+                  <p><strong>Construction Status:</strong> Fully maintained</p>
+                  <p><strong>Damage Info:</strong> None</p>
+                  <canvas id="gardenChart" height="100"></canvas>
+                </div>
+          
+                <!-- Roads and Footpaths -->
+                <div class="glass">
+                  <h2 class="text-2xl font-semibold text-blue-300 mb-2">🛣️ Roads & Footpaths</h2>
+                  <p><strong>Condition:</strong> 70% good, 30% needs repair</p>
+                  <p><strong>Student Feedback:</strong> Better night lighting required</p>
+                  <p><strong>Faculty Feedback:</strong> Clean but slippery during rains</p>
+                  <p><strong>Construction Status:</strong> Repair work scheduled</p>
+                  <p><strong>Damage Info:</strong> Potholes on north side</p>
+                  <canvas id="roadChart" height="100"></canvas>
+                </div>
+          
+                <!-- Playground and Indoor Games -->
+                <div class="glass">
+                  <h2 class="text-2xl font-semibold text-indigo-300 mb-2">🏏 Playgrounds & Indoor Games</h2>
+                  <p><strong>Playgrounds:</strong> 3 major fields (cricket, football, athletics)</p>
+                  <p><strong>Indoor Blocks:</strong> 2 (badminton, table tennis, gym)</p>
+                  <p><strong>Lifespan:</strong> 10 years</p>
+                  <p><strong>Student Feedback:</strong> Excellent but needs new equipment</p>
+                  <p><strong>Faculty Feedback:</strong> Supervision needed during peak hours</p>
+                  <p><strong>Construction Status:</strong> Functioning with minor upgrades pending</p>
+                  <p><strong>Damage Info:</strong> Floor tiles broken in indoor block</p>
+                  <canvas id="sportsChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const drawChart = (id, label, ratings) => {
+          new Chart(document.getElementById(id), {
+            type: 'bar',
+            data: {
+              labels: ['Student', 'Faculty'],
+              datasets: [{
+                label: label,
+                data: ratings,
+                backgroundColor: ['#38bdf8', '#facc15']
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 5,
+                  ticks: {
+                    color: '#fff'
+                  }
+                },
+                x: {
+                  ticks: {
+                    color: '#fff'
+                  }
+                }
+              },
+              plugins: {
+                legend: {
+                  labels: {
+                    color: '#fff'
+                  }
+                }
+              }
+            }
+          });
+        };
+      
+        window.addEventListener('DOMContentLoaded', () => {
+          drawChart('parkChart', 'Park Rating', [4.2, 4.0]);
+          drawChart('hospitalChart', 'Hospital Rating', [3.8, 4.3]);
+          drawChart('academicChart', 'Academic Block Rating', [4.5, 4.4]);
+          drawChart('gardenChart', 'Garden Rating', [4.1, 4.2]);
+          drawChart('roadChart', 'Road Condition Rating', [3.2, 3.8]);
+          drawChart('sportsChart', 'Playground & Indoor Rating', [4.6, 4.1]);
+        });
+      </script>
+      
+</body>
+</html>

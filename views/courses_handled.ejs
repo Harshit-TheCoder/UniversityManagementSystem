@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Faculty Courses</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gradient-to-br from-[#0d1b2a] via-[#1b263b] to-[#415a77] text-white font-sans min-h-screen p-6">
+
+  <!-- Navbar -->
+  <header class="bg-[#1b263b] shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex-shrink-0 text-cyan-400 text-xl font-bold">
+          SRM Faculty Portal
+        </div>
+        <div class="hidden md:flex space-x-6">
+          <a href="/" class="text-white hover:text-cyan-400">Home</a>
+          <a href="/faculty_details" class="text-white hover:text-cyan-400">Dashboard</a>
+          <a href="/faculty_details/finance_updates" class="text-white hover:text-cyan-400">Finance</a>
+          <a href="/faculty_details/courses_handled" class="text-white hover:text-cyan-400">Courses</a>
+          <a href="/faculty_details/faculty_achievements" class="text-white hover:text-cyan-400">Achievements</a>
+        </div>
+        <div class="md:hidden">
+          <!-- Mobile menu toggle can go here -->
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="mt-8">
+    <div class="max-w-5xl mx-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-cyan-300">📘 Courses Handled by Faculty</h1>
+        <button onclick="window.print()" class="bg-cyan-600 hover:bg-cyan-700 text-white p-2 px-4 rounded-lg text-sm">🖨️ Export / Print</button>
+      </div>
+
+      <input type="text" id="searchInput" placeholder="Search courses..." onkeyup="filterCourses()"
+        class="w-full mb-6 p-3 rounded-md bg-[#1e2a3a] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+
+      <div id="coursesContainer" class="space-y-6"></div>
+
+      <!-- Pagination Controls -->
+      <div class="flex justify-center items-center gap-3 mt-8" id="pagination"></div>
+    </div>
+  </main>
+
+  <script>
+    const coursesData = [
+      {
+        code: 'CS301',
+        title: 'Data Structures',
+        semester: 3,
+        credits: 4,
+        type: 'Core',
+        outcome: 'Understand data structures like arrays, stacks, queues, trees, graphs.',
+        plan: ['Week 1-2: Arrays & Strings', 'Week 3-4: Stacks & Queues'],
+        chartId: 'chart1'
+      },
+    ];
+
+    const coursesPerPage = 3;
+    let currentPage = 1;
+
+    function renderCourses() {
+      const container = document.getElementById('coursesContainer');
+      container.innerHTML = '';
+
+      const filteredCourses = coursesData.filter(course =>
+        course.title.toLowerCase().includes(document.getElementById('searchInput').value.toLowerCase())
+      );
+
+      const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
+      const start = (currentPage - 1) * coursesPerPage;
+      const end = start + coursesPerPage;
+
+      filteredCourses.slice(start, end).forEach((course, index) => {
+        const chartId = `chart_${start + index}`;
+        container.innerHTML += `
+          <div class="bg-[#1e2a3a] p-6 rounded-xl shadow-xl group course border border-cyan-700">
+            <div class="flex justify-between items-center cursor-pointer" onclick="toggleAccordion('${chartId}')">
+              <div>
+                <h2 class="text-xl font-semibold text-cyan-300">${course.code} - ${course.title}</h2>
+                <p class="text-sm text-gray-300">Semester: ${course.semester} | Credits: ${course.credits} | Type: ${course.type}</p>
+              </div>
+              <i class="fas fa-chevron-down text-gray-400 group-hover:rotate-180 transition duration-300"></i>
+            </div>
+            <div id="${chartId}" class="mt-4 hidden space-y-4">
+              <div>
+                <h3 class="text-lg font-medium text-cyan-400">🎯 Course Outcome</h3>
+                <p class="text-sm text-gray-200">${course.outcome}</p>
+              </div>
+              <div>
+                <h3 class="text-lg font-medium text-cyan-400">📅 Course Plan</h3>
+                <ul class="list-disc ml-5 text-sm text-gray-200">
+                  ${course.plan.map(p => `<li>${p}</li>`).join('')}
+                </ul>
+              </div>
+              <div>
+                <h3 class="text-lg font-medium text-cyan-400">📊 Performance Chart</h3>
+                <canvas id="${chartId}_canvas" class="bg-white rounded-lg"></canvas>
+              </div>
+            </div>
+          </div>
+        `;
+
+        setTimeout(() => {
+          new Chart(document.getElementById(`${chartId}_canvas`).getContext('2d'), {
+            type: 'bar',
+            data: {
+              labels: ['Quiz', 'Midterm', 'Project', 'Final'],
+              datasets: [{
+                label: 'Avg Score',
+                data: [78, 85, 90, 82],
+                backgroundColor: ['#38bdf8', '#0ea5e9', '#0284c7', '#0369a1'],
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: { display: false },
+                tooltip: { enabled: true }
+              },
+              scales: {
+                y: { beginAtZero: true, ticks: { color: '#fff' } },
+                x: { ticks: { color: '#fff' } }
+              }
+            }
+          });
+        }, 0);
+      });
+
+      renderPagination(totalPages);
+    }
+
+    function toggleAccordion(id) {
+      document.getElementById(id).classList.toggle('hidden');
+    }
+
+    function renderPagination(totalPages) {
+      const pagination = document.getElementById('pagination');
+      pagination.innerHTML = '';
+
+      for (let i = 1; i <= totalPages; i++) {
+        pagination.innerHTML += `
+          <button onclick="goToPage(${i})" class="px-4 py-1 rounded ${i === currentPage ? 'bg-cyan-500 text-white' : 'bg-[#1e2a3a] text-cyan-300 hover:bg-cyan-700'}">
+            ${i}
+          </button>
+        `;
+      }
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      renderCourses();
+    }
+
+    function filterCourses() {
+      currentPage = 1;
+      renderCourses();
+    }
+
+    renderCourses();
+  </script>
+
+</body>
+</html>

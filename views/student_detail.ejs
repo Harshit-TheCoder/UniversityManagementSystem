@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1E2A78, #0F172A);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            margin: 0;
+            padding-bottom: 50px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
+            margin-top: 30px;
+        }
+        .form-control {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+        }
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            box-shadow: 0px 0px 10px #00bcd4;
+        }
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            border: none;
+            font-weight: bold;
+            transition: 0.3s;
+            border-radius: 8px;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #0072ff, #00c6ff);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-light">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Student Portal</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <p class="navbar-toggler-icon"></p>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/student_details">Dashboard</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/student_details/attendance">Attendance</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/student_details/academia">Academic Details</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/student_details/student_course_feedback">Feedback</a></li>
+                </ul>
+              </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="d-flex flex-column align-items-center">
+        <h1 class="mt-4">Student Dashboard</h1>
+
+        <!-- Personal Details -->
+         <div class="container" style="width:1300px !important">
+            <div class="row" style="width:100% !important">
+                <div class="col-md-3">
+                  <p class="detail-label">Name:</p>
+                  <p class="detail-label">Age:</p>
+                  <p class="detail-label">Date of Birth:</p>
+                  <p class="detail-label">Blood Group:</p>
+                  <p class="detail-label">Phone Number:</p>
+                  <p class="detail-label">Gender:</p>
+                  <p class="detail-label">Register Number:</p>
+                  <p class="detail-label">Email:</p>
+                  <p class="detail-label">Address:</p>
+                  <p class="detail-label">Nationality:</p>
+                  <p class="detail-label">Aadhaar:</p>
+                  <p class="detail-label">Scholar Status:</p>
+                  <p class="detail-label">Hostel Name (if applicable):</p>
+                </div>
+                <div class="col-md-3">
+                  <p><%= data.student.name %></p>
+                  <p><%= data.profile.age %></p>
+                  <p><%= data.profile.dob.toISOString().split('T')[0] %></p>
+                  <p><%= data.profile.blood_group %></p>
+                  <p><%= data.profile.phone_number %></p>
+                  <p><%= data.profile.gender %></p>
+                  <p><%= data.student.registration_number %></p>
+                  <p><%= data.student.email %></p>
+                  <p><%= data.background.address %></p>
+                  <p><%= data.background.nationality %></p>
+                  <p><%= data.background.aadhaar %></p>
+                  <p><%= data.background.scholar_status %></p>
+                  <p><%= data.student.hostel_name %></p>
+                </div>
+                <div class="col-md-3">
+                  <p class="detail-label">Father's Name:</p>
+                  <p class="detail-label">Father's Occupation:</p>
+                  <p class="detail-label">Father's Phone Number:</p>
+                  <p class="detail-label">Father's Email:</p>
+ 
+                  <p class="detail-label">Mother's Name:</p>
+                  <p class="detail-label">Mother's Occupation:</p>
+                  <p class="detail-label">Mother's Phone Number:</p>
+                  <p class="detail-label">Mother's Email:</p>
+                </div>
+                <div class="col-md-3">
+                  <!-- Father's Details -->
+                  <p><%= data.father.father_name %></p>
+                  <p><%= data.father.father_occupation %></p>
+                  <p><%= data.father.father_phone %></p>
+                  <p><%= data.father.father_email %></p>
+
+                  <!-- Mother's Details -->
+                  <p><%= data.mother.mother_name %></p>
+                  <p><%= data.mother.mother_occupation %></p>
+                  <p><%= data.mother.mother_phone %></p>
+                  <p><%= data.mother.mother_email %></p>
+                </div>
+              </div>
+         </div>
+        
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
