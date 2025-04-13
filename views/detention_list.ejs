@@ -73,24 +73,29 @@
                     <th class="px-4 py-2">Gender</th>
                     <th class="px-4 py-2">Reg. No.</th>
                     <th class="px-4 py-2">Email</th>
-                    <th class="px-4 py-2">Department</th>
-                    <th class="px-4 py-2">Year</th>
+                    <th class="px-4 py-2">Department Id</th>
+                    <th class="px-4 py-2">Duration</th>
                 </tr>
                 </thead>
                 <tbody class="bg-gray-800 divide-y divide-gray-700">
                 <!-- Example Row -->
-                <tr>
-                    <td class="px-4 py-2">John Doe</td>
-                    <td class="px-4 py-2">20</td>
-                    <td class="px-4 py-2">2004-01-15</td>
-                    <td class="px-4 py-2">B+</td>
-                    <td class="px-4 py-2">9876543210</td>
-                    <td class="px-4 py-2">Male</td>
-                    <td class="px-4 py-2">21BCS1001</td>
-                    <td class="px-4 py-2">john@example.com</td>
-                    <td class="px-4 py-2">CSE</td>
-                    <td class="px-4 py-2">2nd</td>
+                 <% data.result.forEach(function(data) { %>
+
+                  <tr>
+                    <td class="px-4 py-2"><%= data.name %></td>
+                    <td class="px-4 py-2"><%= data.age %></td>
+                    <td class="px-4 py-2"><%= data.dob %></td>
+                    <td class="px-4 py-2"><%= data.blood_group %></td>
+                    <td class="px-4 py-2"><%= data.phone_number %></td>
+                    <td class="px-4 py-2"><%= data.gender %></td>
+                    <td class="px-4 py-2"><%= data.registration_number %></td>
+                    <td class="px-4 py-2"><%= data.email %></td>
+                    <td class="px-4 py-2"><%= data.department_id %></td>
+                    <td class="px-4 py-2"><%= data.detention_duration_months %></td>
                 </tr>
+
+                <% }); %>
+                
                 <!-- Add more student rows as needed -->
                 </tbody>
             </table>

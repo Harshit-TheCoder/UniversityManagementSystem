@@ -61,21 +61,21 @@
                 <div class="card p-3">
                     <i class="fas fa-book card-icon"></i>
                     <h4>Courses Handled</h4>
-                    <p>5 Active Courses</p>
+                    <p><%= data.numcourses.count %> Active Courses</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card p-3">
                     <i class="fas fa-users card-icon"></i>
                     <h4>Students Enrolled</h4>
-                    <p>150+ Students</p>
+                    <p><%= data.enroll.student_count %>+ Students</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card p-3">
                     <i class="fas fa-trophy card-icon"></i>
                     <h4>Achievements</h4>
-                    <p>3 Research Papers Published</p>
+                    <p> <%= data.research_papers.research_papers_count %>  Research Papers Published</p>
                 </div>
             </div>
         </div>
@@ -91,21 +91,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>2024-04-01</td>
-                        <td>Updated Course Materials</td>
-                        <td>Completed</td>
-                    </tr>
-                    <tr>
-                        <td>2024-03-28</td>
-                        <td>Held Faculty Meeting</td>
-                        <td>Completed</td>
-                    </tr>
-                    <tr>
-                        <td>2024-03-25</td>
-                        <td>New Student Registrations</td>
-                        <td>Ongoing</td>
-                    </tr>
+                    <% data.activities.forEach(function(data) { %>
+                        <tr>
+                            <td><%= data.activity_date %></td>
+                            <td><%= data.activity_title %></td>
+                            <td><%= data.status %></td>
+                        </tr>
+                    <% }); %>
                 </tbody>
             </table>
         </div>

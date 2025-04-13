@@ -18,26 +18,25 @@
   </style>
 </head>
 <body class="min-h-screen">
-  <header class="mb-6">
-    <nav class="navbar navbar-expand-lg bg-light">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Student Portal</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span> <!-- ✅ Fixed -->
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item"><a class="nav-link text-dark" href="/">Home</a></li>
-              <li class="nav-item"><a class="nav-link text-dark" href="/student_details">Dashboard</a></li>
-              <li class="nav-item"><a class="nav-link text-dark" href="/student_details/attendance">Attendance</a></li>
-              <li class="nav-item"><a class="nav-link text-dark" href="/student_details/academia">Academic Details</a></li>
-              <li class="nav-item"><a class="nav-link text-dark" href="/student_details/student_course_feedback">Feedback</a></li>
-            </ul>
-          </div>
+  <header class="mb-8">
+    <nav class="bg-white/10 backdrop-blur-md p-4 rounded-lg shadow-lg">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between">
+        <a href="#" class="text-2xl font-bold text-cyan-300">Student Portal</a>
+        <button class="md:hidden text-white focus:outline-none" onclick="document.getElementById('navLinks').classList.toggle('hidden')">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <div class="w-full md:flex md:items-center md:w-auto hidden md:block" id="navLinks">
+          <ul class="flex flex-col md:flex-row gap-4 mt-4 md:mt-0 md:space-x-6 text-white">
+            <li><a class="hover:text-cyan-400" href="/">Home</a></li>
+            <li><a class="hover:text-cyan-400" href="/student_details">Dashboard</a></li>
+            <li><a class="hover:text-cyan-400" href="/student_details/attendance">Attendance</a></li>
+            <li><a class="hover:text-cyan-400" href="/student_details/academia">Academic Details</a></li>
+            <li><a class="hover:text-cyan-400" href="/student_details/student_course_feedback">Feedback</a></li>
+          </ul>
         </div>
+      </div>
     </nav>
-</header>
-
+  </header>
   <center><h1 class="text-3xl font-bold mb-6">Academic Details</h1></center>
   <section class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-10">
     <div class="bg-white/10 p-6 rounded-lg shadow-lg">

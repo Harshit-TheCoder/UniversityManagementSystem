@@ -24,9 +24,6 @@
           <a href="/faculty_details/courses_handled" class="text-white hover:text-cyan-400">Courses</a>
           <a href="/faculty_details/faculty_achievements" class="text-white hover:text-cyan-400">Achievements</a>
         </div>
-        <div class="md:hidden">
-          <!-- Mobile menu toggle can go here -->
-        </div>
       </div>
     </div>
   </header>
@@ -50,18 +47,15 @@
   </main>
 
   <script>
-    const coursesData = [
-      {
-        code: 'CS301',
-        title: 'Data Structures',
-        semester: 3,
-        credits: 4,
-        type: 'Core',
-        outcome: 'Understand data structures like arrays, stacks, queues, trees, graphs.',
-        plan: ['Week 1-2: Arrays & Strings', 'Week 3-4: Stacks & Queues'],
-        chartId: 'chart1'
-      },
-    ];
+    const result = <%- JSON.stringify(result) %>;
+
+    const coursesData = result.map((data, index) => ({
+      code: data.coursecode,
+      title: data.subject_name,
+      semester: data.sem,
+      credits: data.credits,
+      chartId: 'chart' + (index + 1)
+    }));
 
     const coursesPerPage = 3;
     let currentPage = 1;
@@ -85,25 +79,13 @@
             <div class="flex justify-between items-center cursor-pointer" onclick="toggleAccordion('${chartId}')">
               <div>
                 <h2 class="text-xl font-semibold text-cyan-300">${course.code} - ${course.title}</h2>
-                <p class="text-sm text-gray-300">Semester: ${course.semester} | Credits: ${course.credits} | Type: ${course.type}</p>
+                <p class="text-sm text-gray-300">Semester: ${course.semester} | Credits: ${course.credits}</p>
               </div>
               <i class="fas fa-chevron-down text-gray-400 group-hover:rotate-180 transition duration-300"></i>
             </div>
-            <div id="${chartId}" class="mt-4 hidden space-y-4">
-              <div>
-                <h3 class="text-lg font-medium text-cyan-400">🎯 Course Outcome</h3>
-                <p class="text-sm text-gray-200">${course.outcome}</p>
-              </div>
-              <div>
-                <h3 class="text-lg font-medium text-cyan-400">📅 Course Plan</h3>
-                <ul class="list-disc ml-5 text-sm text-gray-200">
-                  ${course.plan.map(p => `<li>${p}</li>`).join('')}
-                </ul>
-              </div>
-              <div>
-                <h3 class="text-lg font-medium text-cyan-400">📊 Performance Chart</h3>
-                <canvas id="${chartId}_canvas" class="bg-white rounded-lg"></canvas>
-              </div>
+            <div id="${chartId}" class="mt-4 hidden">
+              <h3 class="text-lg font-medium text-cyan-400">📊 Performance Chart</h3>
+              <canvas id="${chartId}_canvas" class="bg-white rounded-lg"></canvas>
             </div>
           </div>
         `;
@@ -166,6 +148,5 @@
 
     renderCourses();
   </script>
-
 </body>
 </html>

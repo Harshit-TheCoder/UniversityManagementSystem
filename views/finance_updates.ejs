@@ -49,36 +49,40 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-white/10">
-          <tr class="hover:bg-white/10 transition">
-            <td class="px-4 py-3">2024-04-01</td>
-            <td class="px-4 py-3">₹80,000</td>
-            <td class="px-4 py-3"><span class="bg-green-500/80 text-white px-2 py-1 rounded text-xs">₹5,000</span></td>
-            <td class="px-4 py-3"><span class="bg-red-500/80 text-white px-2 py-1 rounded text-xs">₹2,000</span></td>
-            <td class="px-4 py-3" title="Leave without notice">Unplanned Leave</td>
-            <td class="px-4 py-3">₹3,000</td>
-            <td class="px-4 py-3 font-bold">₹80,000</td>
-            <td class="px-4 py-3 text-green-300">Thank you for your dedication!</td>
-          </tr>
-          <tr class="hover:bg-white/10 transition">
-            <td class="px-4 py-3">2024-03-01</td>
-            <td class="px-4 py-3">₹80,000</td>
-            <td class="px-4 py-3"><span class="bg-gray-400/60 px-2 py-1 rounded text-xs">—</span></td>
-            <td class="px-4 py-3"><span class="bg-gray-400/60 px-2 py-1 rounded text-xs">—</span></td>
-            <td class="px-4 py-3 text-gray-300">N/A</td>
-            <td class="px-4 py-3">₹2,800</td>
-            <td class="px-4 py-3 font-bold">₹77,200</td>
-            <td class="px-4 py-3 text-green-300">Keep up the good work!</td>
-          </tr>
-          <tr class="hover:bg-white/10 transition">
-            <td class="px-4 py-3">2024-02-01</td>
-            <td class="px-4 py-3">₹80,000</td>
-            <td class="px-4 py-3"><span class="bg-green-500/80 text-white px-2 py-1 rounded text-xs">₹3,000</span></td>
-            <td class="px-4 py-3"><span class="bg-gray-400/60 px-2 py-1 rounded text-xs">—</span></td>
-            <td class="px-4 py-3 text-gray-300">N/A</td>
-            <td class="px-4 py-3">₹2,900</td>
-            <td class="px-4 py-3 font-bold">₹80,100</td>
-            <td class="px-4 py-3 text-green-300">Appreciate your efforts!</td>
-          </tr>
+
+          <% result.forEach(function(data) { %>
+            <tr class="hover:bg-white/10 transition">
+              <td class="px-4 py-3"><%= data.payment_date  %></td>
+              <td class="px-4 py-3"><%= data.monthly_salary %> Lakhs</td>
+              <td class="px-4 py-3"><span class="bg-green-500/80 text-white px-2 py-1 rounded text-xs"><%= data.festival_bonus %> Lakhs</span></td>
+              <td class="px-4 py-3"><span class="bg-red-500/80 text-white px-2 py-1 rounded text-xs"><%= data.pay_cut %> Lakhs</span></td>
+              <td class="px-4 py-3" title="Leave without notice"><%= data.reason %></td>
+              <td class="px-4 py-3"><%= data.tax_deductions %> Lakhs</td>
+              <td class="px-4 py-3 font-bold"><%= data.final_amount %> Lakhs</td>
+              <td class="px-4 py-3 text-green-300"><%= data.remarks %></td>
+            </tr>
+            <!-- <tr class="hover:bg-white/10 transition">
+              <td class="px-4 py-3">2024-03-01</td>
+              <td class="px-4 py-3">₹80,000</td>
+              <td class="px-4 py-3"><span class="bg-gray-400/60 px-2 py-1 rounded text-xs">—</span></td>
+              <td class="px-4 py-3"><span class="bg-gray-400/60 px-2 py-1 rounded text-xs">—</span></td>
+              <td class="px-4 py-3 text-gray-300">N/A</td>
+              <td class="px-4 py-3">₹2,800</td>
+              <td class="px-4 py-3 font-bold">₹77,200</td>
+              <td class="px-4 py-3 text-green-300">Keep up the good work!</td>
+            </tr>
+            <tr class="hover:bg-white/10 transition">
+              <td class="px-4 py-3">2024-02-01</td>
+              <td class="px-4 py-3">₹80,000</td>
+              <td class="px-4 py-3"><span class="bg-green-500/80 text-white px-2 py-1 rounded text-xs">₹3,000</span></td>
+              <td class="px-4 py-3"><span class="bg-gray-400/60 px-2 py-1 rounded text-xs">—</span></td>
+              <td class="px-4 py-3 text-gray-300">N/A</td>
+              <td class="px-4 py-3">₹2,900</td>
+              <td class="px-4 py-3 font-bold">₹80,100</td>
+              <td class="px-4 py-3 text-green-300">Appreciate your efforts!</td>
+            </tr> -->
+          <% }); %>
+          
         </tbody>
       </table>
     </div>

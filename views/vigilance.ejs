@@ -68,8 +68,8 @@
     <div class="glass">
       <h2 class="text-3xl font-bold text-rose-400 mb-4">🛡️ University Vigilance Overview</h2>
 
-      <div class="grid md:grid-cols-2 gap-6">
-        <!-- Vigilance Info -->
+      <!-- <div class="grid md:grid-cols-2 gap-6">
+      
         <div>
           <p><i class="fas fa-users mr-2 text-blue-300"></i><strong>Patrolling Units:</strong> 5 (Round-the-clock monitoring)</p>
           <p><i class="fas fa-video mr-2 text-yellow-300"></i><strong>CCTV Cameras:</strong> 120+ (HD, motion-sensitive)</p>
@@ -78,7 +78,7 @@
           <p><i class="fas fa-user-shield mr-2 text-pink-300"></i><strong>Guard Shifts:</strong> 3 (Morning, Afternoon, Night)</p>
         </div>
 
-        <!-- Feedback Section -->
+      
         <div>
           <p><i class="fas fa-comment-alt mr-2 text-blue-200"></i><strong>Student Feedback:</strong> “Feel safe even during late evening hours”</p>
           <p><i class="fas fa-user-tie mr-2 text-yellow-200"></i><strong>Staff Feedback:</strong> “Efficient response to reported issues”</p>
@@ -86,12 +86,51 @@
           <p><i class="fas fa-camera-retro mr-2 text-lime-200"></i><strong>Recent Upgrades:</strong> Facial recognition at main gates</p>
           <p><i class="fas fa-star mr-2 text-yellow-300"></i><strong>Security Rating:</strong> ⭐ 4.7 / 5</p>
         </div>
-      </div>
+      </div> -->
 
-      <!-- Chart -->
       <div class="mt-6">
         <canvas id="vigilanceChart" height="100"></canvas>
       </div>
+      
+      <div class="overflow-x-auto p-4">
+        <table class="min-w-full table-auto border border-gray-300 shadow-lg rounded-lg bg-white">
+          <thead class="bg-blue-500 text-white">
+            <tr>
+              <th class="px-6 py-3 text-left">Patrolling Units</th>
+              <th class="px-6 py-3 text-left">CCTV Cameras</th>
+              <th class="px-6 py-3 text-left">Control Room</th>
+              <th class="px-6 py-3 text-left">Emergency Contacts</th>
+              <th class="px-6 py-3 text-left">Guard Shifts</th>
+              <th class="px-6 py-3 text-left">Student Feedback</th>
+              <th class="px-6 py-3 text-left">Staff Feedback</th>
+              <th class="px-6 py-3 text-left">Surveillance Gaps</th>
+              <th class="px-6 py-3 text-left">Recent Upgrades</th>
+              <th class="px-6 py-3 text-left">Security Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% data.result.forEach((row, index) => { %>
+              <tr class="border-b hover:bg-gray-50 <% if (index % 2 === 0) { %> bg-gray-100 <% } %> text-sm">
+                <td class="px-6 py-4 text-gray-700"><%= row.patrolling_units %></td>
+                <td class="px-6 py-4 text-gray-700"><%= row.cctv_cameras %></td>
+                <td class="px-6 py-4 text-gray-700"><%= row.control_room_status %></td>
+                <td class="px-6 py-4 text-gray-700"><%= row.emergency_contacts %></td>
+                <td class="px-6 py-4 text-gray-700"><%= row.guard_shifts %></td>
+                <td class="px-6 py-4 text-gray-700"><%= row.student_feedback %></td>
+                <td class="px-6 py-4 text-gray-700"><%= row.staff_feedback %></td>
+                <td class="px-6 py-4 text-gray-700"><%= row.surveillance_gaps %></td>
+                <td class="px-6 py-4 text-gray-700"><%= row.recent_upgrades %></td>
+                <td class="px-6 py-4 text-gray-700"><%= row.security_rating %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        
+      </div>
+      
+
+      <!-- Chart -->
+      
     </div>
   </main>
 

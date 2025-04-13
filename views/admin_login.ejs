@@ -66,15 +66,19 @@
 </head>
 <body>
     <div class="login-container">
-        <h2>Login</h2>
-        <form>
+        <h2>Admin Login Portal</h2>
+        <form action="/admin_login", method="POST">
             <div class="mb-3 input-group">
-                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                <input type="email" class="form-control" placeholder="Enter your email" required>
+                <span for="username" class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" class="form-control" name="username" placeholder="Enter your username" required>
             </div>
             <div class="mb-3 input-group">
-                <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                <input type="password" class="form-control" placeholder="Enter your password" required>
+                <span for="email" class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="email" class="form-control" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="mb-3 input-group">
+                <span for="secretkey" class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" class="form-control" name="secretkey" placeholder="Enter your secret key" required>
             </div>
             <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>

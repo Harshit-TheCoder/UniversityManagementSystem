@@ -61,6 +61,7 @@ app.post('/faculty_login', async (req, res) => {
         );
 
         if (result.rows.length > 0) {
+            req.session.faculty_id = result.rows[0].faculty_id;
             res.redirect('/faculty_details');
         } else {
             res.send("Your Login Credentials aren't updated in our database at the moment. We will do the needful in some time......");
@@ -73,18 +74,11 @@ app.post('/faculty_login', async (req, res) => {
 
 
 app.post('/admin_login', async (req, res) => {
-    const { username, email, registration } = req.body;
-    console.log(username, email, registration);
+    const { username, email, secretkey } = req.body;
+    console.log(username, email, secretkey);
     try {
-        const result = await pool.query(
-            'SELECT * FROM student WHERE name = $1 AND email = $2 AND registration_number = $3',
-            [username, email, registration]
-        );
-
-        if (result.rows.length > 0) {
-            res.redirect('/student_details');
-        } else {
-            res.send("Your Login Credentials aren't updated in our database at the moment. We will do the needful in some time......");
+        if(username === "Admin" && email === "admin@srmist.edu.in" && secretkey === "123456"){
+            res.render('admin_detail.ejs');
         }
     } catch (err) {
         console.error(err);
@@ -102,6 +96,92 @@ app.get('/faculty_login', (req, res) => {
 
 app.get('/admin_login', (req, res) => {
     res.render('admin_login.ejs');
+});
+
+app.get('/faculty_details/finance_updates', async (req, res) => {
+    
+    const facultyId = req.session.faculty_id;
+
+    if(!facultyId){
+        return res.redirect('/faculty_login');
+    }
+
+    try{
+        const data = await pool.query('SELECT * FROM employee_payments WHERE faculty_id = $1', [facultyId]);
+        const result = data.rows;
+        res.render('finance_updates.ejs', {result});
+    }
+    catch(error){
+        console.error(error);
+    }
+});
+
+app.get('/faculty_details/courses_handled', async (req, res) => {
+
+    let faculty_id = req.session.faculty_id;
+
+    try{
+        const data = await pool.query("SELECT * FROM faculty_subjects AS f JOIN subjects AS s USING(coursecode) WHERE f.faculty_id = $1", [faculty_id]);
+        const result = data.rows;
+        res.render('courses_handled.ejs', {result});
+    }
+    catch(error){
+        console.error(error);
+    }
+    
+});
+
+app.get('/faculty_details',  async (req, res) => {
+
+    let faculty_id = req.session.faculty_id;
+    try{
+        let enroll = await pool.query("SELECT * FROM faculty_students_enrolled WHERE faculty_id = $1", [faculty_id]);
+        let research_papers = await pool.query("SELECT * FROM faculty_research_papers WHERE faculty_id = $1", [faculty_id]);
+        let activities = await pool.query("SELECT * FROM faculty_recent_activities WHERE faculty_id = $1", [faculty_id]);
+        let numcourses = await pool.query("SELECT COUNT(coursecode) FROM faculty_subjects GROUP BY faculty_id HAVING faculty_id = $1", [faculty_id]);
+        let data = {
+            enroll: enroll.rows[0],
+            research_papers: research_papers.rows[0],
+            activities: activities.rows,
+            numcourses: numcourses.rows[0]
+        };
+
+        console.log(enroll.rows[0],research_papers.rows[0],activities.rows,numcourses.rows[0]);
+        res.render('faculty_detail.ejs', {data});
+    }
+    catch(error){
+        console.error(error);
+    }
+    
+});
+
+app.get('/faculty_details/faculty_achievements', async (req, res) => {
+
+    let faculty_id = req.session.faculty_id;
+    try{
+        let degree = await pool.query("SELECT * FROM faculty_degrees WHERE faculty_id = $1", [faculty_id]);
+        let achievements = await pool.query("SELECT * FROM faculty_achievements WHERE faculty_id = $1", [faculty_id]);
+        let projects = await pool.query("SELECT * FROM faculty_projects WHERE faculty_id = $1", [faculty_id]);
+        let certifications = await pool.query("SELECT * FROM faculty_certifications WHERE faculty_id = $1", [faculty_id]);
+        let skills = await pool.query("SELECT * FROM faculty_skills WHERE faculty_id = $1", [faculty_id]);
+        let activities = await pool.query("SELECT * FROM faculty_activities WHERE faculty_id = $1", [faculty_id]);
+
+        let result = {
+            degree: degree.rows,
+            achievements: achievements.rows,
+            projects:  projects.rows,
+            certifications: certifications.rows,
+            skills: skills.rows,
+            activities: activities.rows
+        };
+
+        res.render('faculty_achievements.ejs', {result});
+
+    }
+    catch(error){
+        console.error(error);
+    }
+    
 });
 
 app.get('/student_details', async (req, res) => {
@@ -267,48 +347,119 @@ app.post('/student_details/student_course_feedback', async (req, res) => {
     }
 });
 
-app.get('/faculty_details', (req, res) => {
-    res.render('faculty_detail.ejs');
-});
-
-app.get('/faculty_details/faculty_achievements', (req, res) => {
-    res.render('faculty_achievements.ejs');
-});
-
-app.get('/faculty_details/courses_handled', (req, res) => {
-    res.render('courses_handled.ejs');
-});
-
-app.get('/faculty_details/finance_updates', (req, res) => {
-    res.render('finance_updates.ejs');
-});
-
 app.get('/admin_details', (req, res) => {
     res.render('admin_detail.ejs');
 });
 
-app.get('/admin_details/vigilance', (req, res) => {
-    res.render('vigilance.ejs');
+app.get('/admin_details/vigilance', async (req, res) => {
+    try{
+        let result = await pool.query("SELECT * FROM university_vigilance");
+        let data = {
+            result: result.rows
+        };
+        res.render('vigilance.ejs', {data});
+    }
+    catch(error){
+        console.error(error);
+    }
+    
 });
 
-app.get('/admin_details/detention_list', (req, res) => {
-    res.render('detention_list.ejs');
+app.get('/admin_details/detention_list', async (req, res) => {
+    try{
+        let result = await pool.query(`
+            SELECT 
+              s.student_id, sp.age, sp.dob, sp.blood_group, sp.phone_number, sp.gender, 
+              s.name, s.department_id, s.email, s.registration_number,
+              sdl.detention_duration_months
+            FROM student_detention_list AS sdl
+            JOIN student_profile AS sp ON sdl.student_id = sp.student_id
+            JOIN student AS s ON sdl.student_id = s.student_id;
+          `);
+        let data = {
+            result: result.rows
+        };
+        res.render('detention_list.ejs', {data});
+    }
+    catch(error){
+        console.error(error);
+    }
+    
 });
 
-app.get('/admin_details/mess_details', (req, res) => {
-    res.render('mess.ejs');
+app.get('/admin_details/mess_details', async (req, res) => {
+
+    const hostels = [
+        'kalpana_chawla', 'm_block', 'meenakshi', 'began',
+        'oori', 'paari', 'kaari', 'malligai', 'thamarai', 'nelson_mandela',
+        'aadhiyaman', 'agasthiyar', 'sannasi', 'mullai',
+        'manoranjitham', 'avayyiar', 'krs'
+      ];
+    
+      let hostelData = {};
+ 
+    try{
+        let boys_hostels = await pool.query("SELECT * FROM hostels WHERE gender = 'Male';");
+        let girls_hostels = await pool.query("SELECT * FROM hostels WHERE gender = 'Female';");
+
+        for (let hostel of hostels) {
+            let complaints = await pool.query(`SELECT * FROM ${hostel}_complaints`);
+            let messComplaints = await pool.query(`SELECT * FROM ${hostel}_mess_complaints`);
+            let messMenu = await pool.query(`SELECT * FROM ${hostel}_mess_menu`);
+      
+            hostelData[hostel] = {
+              complaints: complaints.rows,
+              messComplaints: messComplaints.rows,
+              messMenu: messMenu.rows
+            };
+        }
+
+        console.log(hostelData);
+        
+        let data = {
+            boys: boys_hostels.rows,
+            girls: girls_hostels.rows,
+            hostel_data: hostelData
+        };
+
+        res.render('mess.ejs', {data});
+
+    }
+    catch(error){
+        console.error(error);
+    }
+    
 });
 
-app.get('/admin_details/hostel_details', (req, res) => {
-    res.render('hostel.ejs');
-});
+// app.get('/admin_details/hostel_details', (req, res) => {
+//     res.render('hostel.ejs');
+// });
 
-app.get('/admin_details/complaint_log', (req, res) => {
-    res.render('complaint.ejs');
-});
+// app.get('/admin_details/complaint_log', (req, res) => {
+//     res.render('complaint.ejs');
+// });
 
-app.get('/admin_details/infrastructure_details', (req, res) => {
-    res.render('infrastructure.ejs');
+app.get('/admin_details/infrastructure_details', async (req, res) => {
+    try{
+        let park = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Parks' ");
+        let hospitals = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Hospitals' ");
+        let academic = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Academic Blocks' ");
+        let gardens = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Gardens' ");
+        let roads = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Roads & Footpaths' ");
+        let playground = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Playgrounds & Indoor Games' ");
+        let data = {
+            park : park.rows[0],
+            hospitals : hospitals.rows[0],
+            academic : academic.rows[0],
+            gardens : gardens.rows[0],
+            roads :roads.rows[0],
+            playground: playground.rows[0]
+        };
+        res.render('infrastructure.ejs', {data});
+    }
+    catch(error){
+        console.error(error);
+    }
 });
 
 // Start the server

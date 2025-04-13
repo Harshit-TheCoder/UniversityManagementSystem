@@ -54,107 +54,118 @@
     <!-- MAIN DASHBOARD -->
   <div class="dashboard-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-    <h1 class="text-3xl font-bold mb-6">🎓 Faculty Profile Dashboard</h1>
+    <center><h1 class="text-3xl font-bold mb-6">🎓 Faculty Achievements</h1></center>
+    
 
     <!-- Grid layout -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
       <!-- Achievements -->
-      <div class="card rounded-xl p-6 shadow-lg">
+       
+      <div class="card rounded-xl p-6 shadow-lg" style="height: 500px; overflow-y: scroll;">
         <h2 class="text-xl font-semibold mb-3">🏆 Achievements</h2>
-        <ul class="list-disc ml-5 text-sm space-y-1">
-          <li>Best Researcher Award 2023</li>
-          <li>Published 10+ IEEE Papers</li>
-          <li>Invited as Keynote Speaker at AIConf</li>
-        </ul>
+        <ol class="list-disc ml-5 text-sm space-y-1">
+          <% result.achievements.forEach(function(data) { %>
+            <li> 
+              <div class="flex flex-col gap-3">
+                <p>Title: <%= data.title %></p>
+                <p>Year: <%= data.year %></p>
+                <p>Description</p>
+                <p> <%= data.description %></p>
+              </div>
+              
+            </li>
+            <% }); %>
+          </ol>
       </div>
 
       <!-- Projects -->
-      <div class="card rounded-xl p-6 shadow-lg">
+      <div class="card rounded-xl p-6 shadow-lg" style="height: 500px; overflow-y: scroll;">
         <h2 class="text-xl font-semibold mb-3">🧪 Projects</h2>
-        <ul class="list-disc ml-5 text-sm space-y-1">
-          <li>AI-Powered Student Analytics System</li>
-          <li>Smart Attendance using Face Recognition</li>
-          <li>IoT-based Health Monitoring</li>
-        </ul>
+        <ol class="list-disc ml-5 text-sm space-y-1">
+          <% result.projects.forEach(function(data) { %>
+            <li> 
+              <div class="flex flex-col gap-3">
+                <p>Title: <%= data.project_title %></p>
+                <p>Description</p>
+                <p> <%= data.description %></p>
+              </div>
+              
+            </li>
+            <% }); %>
+        </ol>
       </div>
 
       <!-- Degree -->
-      <div class="card rounded-xl p-6 shadow-lg">
+      <div class="card rounded-xl p-6 shadow-lg" style="height: 500px; overflow-y: scroll;">
         <h2 class="text-xl font-semibold mb-3">🎓 Degree</h2>
-        <ul class="list-disc ml-5 text-sm space-y-1">
-          <li>PhD in Computer Science - IIT Madras</li>
-          <li>M.Tech in AI - NIT Trichy</li>
-          <li>B.E in CSE - Anna University</li>
-        </ul>
+        <ol class="list-disc ml-5 text-sm space-y-1">
+          <% result.degree.forEach(function(data) { %>
+            <li> 
+              <div class="flex flex-col gap-3">
+                <p>Degree: <%= data.degree_name %></p>
+                <p>Major: <%= data.major %></p>
+                <p>University: <%= data.university %></p>
+                <p>Year of Completion: <%= data.year_completed %></p>
+              </div>
+              
+            </li>
+            <% }); %>
+        </ol>
       </div>
 
       <!-- Co-Curricular Activities -->
-      <div class="card rounded-xl p-6 shadow-lg">
+      <div class="card rounded-xl p-6 shadow-lg" style="height: 500px; overflow-y: scroll;">
         <h2 class="text-xl font-semibold mb-3">🤝 Co-Curricular Activities</h2>
-        <ul class="list-disc ml-5 text-sm space-y-1">
-          <li>Mentor - HackSRM 2024</li>
-          <li>Faculty Coordinator - Coding Club</li>
-          <li>Guest Lecturer - Online Bootcamps</li>
-        </ul>
+        <ol class="list-disc ml-5 text-sm space-y-1">
+          <% result.activities.forEach(function(data) { %>
+            <li> 
+              <div class="flex flex-col gap-3">
+                <p>Event: <%= data.event_or_org %></p>
+                <p>Role: <%= data.role %></p>
+                <p>Year: <%= data.year %></p>
+              </div>
+              
+            </li>
+            <% }); %>
+        </ol>
       </div>
 
       <!-- Skills -->
-      <div class="card rounded-xl p-6 shadow-lg">
+      <div class="card rounded-xl p-6 shadow-lg" style="height: 500px; overflow-y: scroll;">
         <h2 class="text-xl font-semibold mb-3">💡 Skills</h2>
-        <ul class="list-disc ml-5 text-sm space-y-1">
-          <li>Machine Learning, Deep Learning</li>
-          <li>Python, Java, JavaScript</li>
-          <li>Full Stack Web Development</li>
-        </ul>
+        <ol class="list-disc ml-5 text-sm space-y-1">
+          <% result.skills.forEach(function(data) { %>
+            <li> 
+              <div class="flex flex-col gap-3">
+                <p>Name: <%= data.skill_name %></p>
+                <p>Category: <%= data.skill_category %></p>
+              </div>
+              
+            </li>
+            <% }); %>
+        </ol>
       </div>
 
       <!-- Certifications -->
-      <div class="card rounded-xl p-6 shadow-lg">
+      <div class="card rounded-xl p-6 shadow-lg" style="height: 500px; overflow-y: scroll;">
         <h2 class="text-xl font-semibold mb-3">📜 Certifications</h2>
-        <ul class="list-disc ml-5 text-sm space-y-1">
-          <li>Microsoft Azure AI Fundamentals</li>
-          <li>Google TensorFlow Developer</li>
-          <li>IBM Data Science Professional</li>
-        </ul>
+        <ol class="list-disc ml-5 text-sm space-y-1">
+          <% result.certifications.forEach(function(data) { %>
+            <li> 
+              <div class="flex flex-col gap-3">
+                <p>Name: <%= data.certificate_name %></p>
+                <p>Provider: <%= data.provider %></p>
+                <p>Year: <%= data.year_awarded %></p>
+              </div>
+              
+            </li>
+            <% }); %>
+        </ol>
       </div>
 
       <!-- Education Table -->
-      <div class="card rounded-xl p-6 shadow-lg md:col-span-2 lg:col-span-3">
-        <h2 class="text-xl font-semibold mb-4">📘 Education Details</h2>
-        <div class="overflow-auto table-container">
-          <table class="min-w-full text-sm text-left">
-            <thead>
-              <tr class="text-cyan-300 border-b border-gray-400">
-                <th class="py-2 px-4">Degree</th>
-                <th class="py-2 px-4">Institution</th>
-                <th class="py-2 px-4">Year</th>
-                <th class="py-2 px-4">CGPA</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="border-b border-gray-600">
-                <td class="py-2 px-4">PhD (CSE)</td>
-                <td class="py-2 px-4">IIT Madras</td>
-                <td class="py-2 px-4">2023</td>
-                <td class="py-2 px-4">9.2</td>
-              </tr>
-              <tr class="border-b border-gray-600">
-                <td class="py-2 px-4">M.Tech (AI)</td>
-                <td class="py-2 px-4">NIT Trichy</td>
-                <td class="py-2 px-4">2020</td>
-                <td class="py-2 px-4">9.1</td>
-              </tr>
-              <tr>
-                <td class="py-2 px-4">B.E (CSE)</td>
-                <td class="py-2 px-4">Anna University</td>
-                <td class="py-2 px-4">2018</td>
-                <td class="py-2 px-4">8.9</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      
 
     </div>
   </div>
