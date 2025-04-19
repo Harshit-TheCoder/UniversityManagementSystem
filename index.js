@@ -24,8 +24,53 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+
+app.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.send("Error logging out");
+        }
+        res.redirect('/'); // Redirect to the home page or login page after logout
+    });
+});
+
+
+function checkUserLogout(req, res, next) {
+    if (req.session.student_id) {
+        return res.redirect('/student_details');
+    } else if (req.session.faculty_id) {
+        return res.redirect('/faculty_details');
+    } else if (req.session.admin_id) {
+        return res.redirect('/admin_details');
+    }
+    next(); // Allow access if no one is logged in
+}
+
+
+function checkStudentLogin(req, res, next) {
+    if (req.session.student_id) {
+        return next(); // Allow access to the route
+    }
+    res.redirect('/student_login'); // Redirect to the student login page if not logged in
+}
+
+// Middleware to check if the faculty is logged in
+function checkFacultyLogin(req, res, next) {
+    if (req.session.faculty_id) {
+        return next(); // Allow access to the route
+    }
+    res.redirect('/faculty_login'); // Redirect to the faculty login page if not logged in
+}
+
+// Middleware to check if the admin is logged in
+function checkAdminLogin(req, res, next) {
+    if (req.session.admin_id) { // Check for faculty session
+        return next(); // Allow access to the route
+    }
+    res.redirect('/admin_login'); // Redirect to the admin login page if not logged in
+}
 // Define routes
-app.get('/', (req, res) => {
+app.get('/', checkUserLogout, (req, res) => {
     res.render('index.ejs');
 });
 
@@ -78,6 +123,7 @@ app.post('/admin_login', async (req, res) => {
     console.log(username, email, secretkey);
     try {
         if(username === "Admin" && email === "admin@srmist.edu.in" && secretkey === "123456"){
+            req.session.admin_id = 123456;
             res.render('admin_detail.ejs');
         }
     } catch (err) {
@@ -98,7 +144,7 @@ app.get('/admin_login', (req, res) => {
     res.render('admin_login.ejs');
 });
 
-app.get('/faculty_details/finance_updates', async (req, res) => {
+app.get('/faculty_details/finance_updates', checkFacultyLogin,  async (req, res) => {
     
     const facultyId = req.session.faculty_id;
 
@@ -116,7 +162,7 @@ app.get('/faculty_details/finance_updates', async (req, res) => {
     }
 });
 
-app.get('/faculty_details/courses_handled', async (req, res) => {
+app.get('/faculty_details/courses_handled', checkFacultyLogin,  async (req, res) => {
 
     let faculty_id = req.session.faculty_id;
 
@@ -131,7 +177,7 @@ app.get('/faculty_details/courses_handled', async (req, res) => {
     
 });
 
-app.get('/faculty_details',  async (req, res) => {
+app.get('/faculty_details', checkFacultyLogin,  async (req, res) => {
 
     let faculty_id = req.session.faculty_id;
     try{
@@ -155,7 +201,7 @@ app.get('/faculty_details',  async (req, res) => {
     
 });
 
-app.get('/faculty_details/faculty_achievements', async (req, res) => {
+app.get('/faculty_details/faculty_achievements', checkFacultyLogin, async (req, res) => {
 
     let faculty_id = req.session.faculty_id;
     try{
@@ -184,7 +230,7 @@ app.get('/faculty_details/faculty_achievements', async (req, res) => {
     
 });
 
-app.get('/student_details', async (req, res) => {
+app.get('/student_details', checkStudentLogin, async (req, res) => {
 
     const studentId = req.session.student_id;
 
@@ -213,7 +259,7 @@ app.get('/student_details', async (req, res) => {
     }
 });
 
-app.get('/student_details/attendance', async (req, res) => {
+app.get('/student_details/attendance', checkStudentLogin,  async (req, res) => {
 
     const studentId = req.session.student_id;
 
@@ -234,7 +280,7 @@ app.get('/student_details/attendance', async (req, res) => {
 
 });
 
-app.get('/student_details/academia', async (req, res) => {
+app.get('/student_details/academia', checkStudentLogin, async (req, res) => {
 
     let studentId = req.session.student_id;
 
@@ -323,11 +369,11 @@ app.get('/student_details/academia', async (req, res) => {
 
 });
 
-app.get('/student_details/student_course_feedback', (req, res) => {
+app.get('/student_details/student_course_feedback', checkStudentLogin, (req, res) => {
     res.render('student_course_feedback.ejs');
 });
 
-app.post('/student_details/student_course_feedback', async (req, res) => {
+app.post('/student_details/student_course_feedback', checkStudentLogin, async (req, res) => {
     let studentId = req.session.student_id;
     const {subject_code, subject_name,subject_feedback, hostel_name, hostel_feedback, infra_feedback,mess_name, mess_feedback, faculty_id, faculty_name, faculty_feedback, ambience_feedback } = req.body;
 
@@ -347,11 +393,11 @@ app.post('/student_details/student_course_feedback', async (req, res) => {
     }
 });
 
-app.get('/admin_details', (req, res) => {
+app.get('/admin_details', checkAdminLogin, (req, res) => {
     res.render('admin_detail.ejs');
 });
 
-app.get('/admin_details/vigilance', async (req, res) => {
+app.get('/admin_details/vigilance', checkAdminLogin, async (req, res) => {
     try{
         let result = await pool.query("SELECT * FROM university_vigilance");
         let data = {
@@ -365,7 +411,7 @@ app.get('/admin_details/vigilance', async (req, res) => {
     
 });
 
-app.get('/admin_details/detention_list', async (req, res) => {
+app.get('/admin_details/detention_list', checkAdminLogin, async (req, res) => {
     try{
         let result = await pool.query(`
             SELECT 
@@ -387,7 +433,30 @@ app.get('/admin_details/detention_list', async (req, res) => {
     
 });
 
-app.get('/admin_details/mess_details', async (req, res) => {
+app.get('/admin_details/infrastructure_details', checkAdminLogin, async (req, res) => {
+    try{
+        let park = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Parks' ");
+        let hospitals = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Hospitals' ");
+        let academic = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Academic Blocks' ");
+        let gardens = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Gardens' ");
+        let roads = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Roads & Footpaths' ");
+        let playground = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Playgrounds & Indoor Games' ");
+        let data = {
+            park : park.rows[0],
+            hospitals : hospitals.rows[0],
+            academic : academic.rows[0],
+            gardens : gardens.rows[0],
+            roads :roads.rows[0],
+            playground: playground.rows[0]
+        };
+        res.render('infrastructure.ejs', {data});
+    }
+    catch(error){
+        console.error(error);
+    }
+});
+
+app.get('/admin_details/mess_details', checkAdminLogin, async (req, res) => {
 
     const hostels = [
         'kalpana_chawla', 'm_block', 'meenakshi', 'began',
@@ -435,32 +504,68 @@ app.get('/admin_details/mess_details', async (req, res) => {
 //     res.render('hostel.ejs');
 // });
 
-// app.get('/admin_details/complaint_log', (req, res) => {
-//     res.render('complaint.ejs');
-// });
+app.get('/admin_details/library', checkAdminLogin, async (req, res) => {
+    try {
+        let os = await pool.query("SELECT * FROM operating_system");
+        let coa = await pool.query("SELECT * FROM computer_system_and_organization");
+        let daa = await pool.query("SELECT * FROM daa");
+        let dsa = await pool.query("SELECT * FROM dsa");
+        let dbms = await pool.query("SELECT * FROM dbms");
+        let ai = await pool.query("SELECT * FROM artificial_intelligence_and_machine_learning");
+        let ann = await pool.query("SELECT * FROM ann");
+        let cnn = await pool.query("SELECT * FROM cnn");
+        let rnn = await pool.query("SELECT * FROM rnn");
+        let cd = await pool.query("SELECT * FROM compiler_design");
+        let oops = await pool.query("SELECT * FROM oops");
+        let java = await pool.query("SELECT * FROM java");
+        let python = await pool.query("SELECT * FROM python");
+        let c = await pool.query("SELECT * FROM c");
+        let cpp = await pool.query("SELECT * FROM cpp");
 
-app.get('/admin_details/infrastructure_details', async (req, res) => {
-    try{
-        let park = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Parks' ");
-        let hospitals = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Hospitals' ");
-        let academic = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Academic Blocks' ");
-        let gardens = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Gardens' ");
-        let roads = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Roads & Footpaths' ");
-        let playground = await pool.query("SELECT * FROM overall_feedbacks WHERE facility_type = 'Playgrounds & Indoor Games' ");
         let data = {
-            park : park.rows[0],
-            hospitals : hospitals.rows[0],
-            academic : academic.rows[0],
-            gardens : gardens.rows[0],
-            roads :roads.rows[0],
-            playground: playground.rows[0]
+            os: os.rows,
+            coa: coa.rows,
+            daa: daa.rows,
+            dsa: dsa.rows,
+            ai: ai.rows,
+            ann: ann.rows,
+            cnn: cnn.rows,
+            rnn: rnn.rows,
+            cd: cd.rows,
+            oops: oops.rows,
+            java: java.rows,
+            python: python.rows,
+            c: c.rows,
+            cpp: cpp.rows,
+            dbms: dbms.rows
         };
-        res.render('infrastructure.ejs', {data});
-    }
-    catch(error){
-        console.error(error);
+
+        let dict = {
+            "Operating Systems" : "os",
+            "Data Structure and Algorithms": "dsa",
+            "Design and Analysis of Algorithms": "daa",
+            "Database Management Systems": "dbms",
+            "Compiler Design": "cd",
+            "Object Oriented Programming": "oops",
+            "Artificial Intelligence": "ai",
+            "Computer Organization and Architecture": "coa",
+            "Recurrent Neural Networks": "rnn",
+            "Artificial Neural Networks": "ann",
+            "Convolutional Neural Networks": "cnn",
+            "Java": "java",
+            "Python": "python",
+            "C": "c",
+            "C++": "cpp"
+        }
+
+        res.render('library.ejs', { data , dict});
+        // res.send(data);
+    } catch (error) {
+        // console.error("Error occurred while fetching data:", error);  // Log the error
+        // res.status(500).send("Internal Server Error");  // Return a 500 error message
     }
 });
+
 
 // Start the server
 app.listen(port, () => {

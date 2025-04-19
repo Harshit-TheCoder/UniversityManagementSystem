@@ -29,25 +29,27 @@
 <body class="min-h-screen">
 
   <!-- NAVBAR -->
-  <header class="py-4">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16 items-center">
-        <div class="flex-shrink-0 text-white text-xl font-bold">
-          Navbar
-        </div>
-        <div class="hidden md:flex space-x-6">
-          <a href="/" class="text-white hover:text-cyan-400">Home</a>
-          <a href="/faculty_details" class="text-white hover:text-cyan-400">Dashboard</a>
-          <a href="/faculty_details/finance_updates" class="text-white hover:text-cyan-400">Finance</a>
-          <a href="/faculty_details/courses_handled" class="text-white hover:text-cyan-400">Courses</a>
-          <a href="/faculty_details/faculty_achievements" class="text-white hover:text-cyan-400">Achievements</a>
-        </div>
-        <div class="md:hidden">
-          <!-- Optional mobile toggle -->
+  <header class="mb-8">
+    <nav class="bg-white/10 backdrop-blur-md p-4 rounded-lg shadow-lg">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between">
+        <a href="#" class="text-2xl font-bold text-cyan-300">Student Portal</a>
+        <button class="md:hidden text-white focus:outline-none" onclick="document.getElementById('navLinks').classList.toggle('hidden')">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <div class="w-full md:flex md:items-center md:w-auto hidden md:block" id="navLinks">
+          <ul class="flex flex-col md:flex-row gap-4 mt-4 md:mt-0 md:space-x-6 text-white">
+              <li class="nav-item"><a class="nav-link" href="/faculty_details">Dashboard</a></li>
+              <li class="nav-item"><a class="nav-link" href="/faculty_details/finance_updates">Finance</a></li>
+              <li class="nav-item"><a class="nav-link" href="/faculty_details/courses_handled">Courses</a></li>
+              <li class="nav-item"><a class="nav-link" href="/faculty_details/faculty_achievements">Achievements</a></li>
+              <li><a class="btn btn-danger" href="/logout">Logout</a></li>
+        </ul>
         </div>
       </div>
-    </div>
+    </nav>
   </header>
+
+
 
   <main>
 
